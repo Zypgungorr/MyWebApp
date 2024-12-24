@@ -1,20 +1,36 @@
-﻿@page
+@page
 @model MyWebApp.Pages.IndexModel
 
 <style>
-    h2 {
-        color: black;
-        font-weight: 100;
-        font-family: serif;
-        font-size: 250%;
-    }
+     body {
+  margin: 0; 
+  padding: 0; 
+  background-color: #000; 
+  border:#000 none;
+}
+
+   h2 {
+    color: white;
+    font-weight: 100;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 250%;
+    padding: 0px;
+    margin-top: 60px;
+}
+
+#titledesc {
+    color: white;
+    font-size: 120%;
+    padding-left: 0px;
+    margin-top: 0; 
+}
 
     .d-flex {
         gap: 10px; 
     }
 
     .movie-card {
-        width: 250px;
+        width: 260px;
         flex-shrink: 0; 
         text-align: center;
     }
@@ -39,6 +55,7 @@
     .movie-title {
         font-size: 1rem;
         font-weight: bold;
+        color: rgb(157, 155, 155);
     }
 
     .movie-year {
@@ -47,13 +64,15 @@
     }
 </style>
 
-@{
-    ViewData["Title"] = "Home page";
-}
+ @{
+        ViewData["Title"] = "Home page";
+    }
 
 
-<h2> Top 10 on CineHorizon this week</h2>
-
+    <h2> SUGGESTIONS FOR YOU </h2>
+   <p id="titledesc">
+    As suggest for you by CineHorizon voters.
+</p>
 
 
 @{
