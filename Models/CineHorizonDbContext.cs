@@ -21,8 +21,12 @@ public partial class CineHorizonDbContext : DbContext
     public virtual DbSet<Genre>? Genres { get; set; }
 
     public virtual DbSet<Movie>? Movies { get; set; }
-    
+
     public virtual DbSet<Comment>? Comments { get; set; }
+
+    public virtual DbSet<User>? Users { get; set; }
+
+    public virtual DbSet<MovieLike>? MovieLikes { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -43,9 +47,26 @@ public partial class CineHorizonDbContext : DbContext
                 .HasColumnName("name");
         });
 
-        modelBuilder.Entity<Movie>()
-            .Property(m => m.Type)
-            .HasColumnName("type"); 
+        modelBuilder.Entity<MovieLike>(entity =>
+        {
+            entity.HasKey(ml => new { ml.MovieId, ml.UserId }).HasName("movie_likes_pkey");
+
+            entity.ToTable("movielikes");
+
+            entity.HasOne(ml => ml.Movie)
+                .WithMany(m => m.MovieLikes)
+                .HasForeignKey(ml => ml.MovieId)
+                .HasConstraintName("fk_movie_like_movieid");
+
+            entity.HasOne(ml => ml.User)
+                .WithMany(u => u.LikedMovies)
+                .HasForeignKey(ml => ml.UserId)
+                .HasConstraintName("fk_movie_like_userid");
+
+            entity.Property(ml => ml.MovieId).HasColumnName("movieid");
+            entity.Property(ml => ml.UserId).HasColumnName("userid");
+        });
+
 
         modelBuilder.Entity<Genre>(entity =>
         {
@@ -122,22 +143,54 @@ public partial class CineHorizonDbContext : DbContext
                     });
         });
 
-        modelBuilder.Entity<Comment>(entity =>
+            modelBuilder.Entity<Comment>(entity =>
+            {
+                entity.HasKey(e => e.CommentId).HasName("comments_pkey");
+
+                entity.ToTable("comments");
+
+                entity.Property(e => e.CommentId).HasColumnName("id");
+                entity.Property(e => e.MovieId).HasColumnName("movieid");
+                entity.Property(e => e.UserId).HasColumnName("userid");
+                entity.Property(e => e.Content).HasColumnName("content");
+                entity.Property(e => e.CreatedAt).HasColumnName("createdat");
+
+                entity.HasOne(c => c.Movie)
+                    .WithMany()
+                    .HasForeignKey(c => c.MovieId)
+                    .HasConstraintName("FK_Movie_Comment");
+
+                entity.HasOne(c => c.User)
+                    .WithMany()
+                    .HasForeignKey(c => c.UserId)
+                    .HasConstraintName("FK_Comment_User");
+            });
+
+        modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("comments_pkey");
+            entity.HasKey(e => e.Uuid).HasName("users_pkey");
 
-            entity.ToTable("comments");
+            entity.ToTable("users");
 
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.MovieId).HasColumnName("movieid");
-            entity.Property(e => e.Content).HasColumnName("content");
-            entity.Property(e => e.CreatedAt).HasColumnName("createdat");
-
-            entity.HasOne<Movie>()
-                .WithMany()
-                .HasForeignKey(e => e.MovieId)
-                .HasConstraintName("FK_Movie_Comment");
+            entity.Property(e => e.Uuid).HasColumnName("uuid");
+            entity.Property(e => e.Email)
+             .IsRequired()
+            .HasMaxLength(255)
+        .HasColumnName("email");
+            entity.Property(e => e.Password)
+                .IsRequired()
+                .HasMaxLength(255)
+                .HasColumnName("password");
+            entity.Property(e => e.Name)
+                .HasMaxLength(255)
+                .HasColumnName("name");
+            entity.Property(e => e.Surname)
+                .HasMaxLength(255)
+                .HasColumnName("surname");
         });
+
+
+
 
         OnModelCreatingPartial(modelBuilder);
     }
