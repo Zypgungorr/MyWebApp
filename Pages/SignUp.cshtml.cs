@@ -50,7 +50,7 @@ namespace MyWebApp.Pages
             _context.Users?.Add(newUser);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("/Index");
+            return RedirectToPage("/SignIn");
         }
     }
 }
