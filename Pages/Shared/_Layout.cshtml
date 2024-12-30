@@ -30,7 +30,7 @@
                     </div>
                 </div>
                     <div class="navbar-nav ml-auto">
-                        @if (User.Identity.IsAuthenticated)
+                        @if (User.Identity!.IsAuthenticated)
                         {
                             <span class="navbar-text text-white">Hello, @User.Identity.Name</span>
                             <a class="nav-link " href="/SignOut">Sign Out</a>
