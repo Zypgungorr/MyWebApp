@@ -46,7 +46,7 @@ using BCrypt.Net;
             {
                 new Claim(ClaimTypes.Name, user.Name!),
                 new Claim(ClaimTypes.Email, user.Email!),
-                new Claim("UserId", user.Uuid.ToString())
+                new Claim("UserId", user.Uuid.ToString()!)
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

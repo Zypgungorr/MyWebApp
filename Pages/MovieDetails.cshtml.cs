@@ -48,7 +48,7 @@ namespace MyWebApp.Pages
 
                 Likers = _context.MovieLikes?
                     .Where(ml => ml.MovieId == Movie.Movieid)
-                    .Select(ml => new User { Uuid = ml.User.Uuid, Name = ml.User.Name }) 
+                    .Select(ml => new User { Uuid = ml.User!.Uuid, Name = ml.User!.Name }) 
                     .ToList();
             }
             else
